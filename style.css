@@ -649,10 +649,10 @@ body {
   .app-header { flex-direction: column; align-items: center; padding: 20px 16px; }
   .header-decor { flex-direction: row; }
   .brand-logo { flex-wrap: wrap; gap: 10px; }
-  .user-info-bar { flex-direction: column; }
+  .user-info-bar { flex-direction: column; align-items: stretch; width: 100%; }
   .info-divider { width: 100%; height: 1px; }
   .bottom-section { grid-template-columns: 1fr 1fr; }
-  .info-field select { text-align: right; text-align-last: right; }
+  .info-field input, .info-field select { text-align: left; text-align-last: left; }
 }
 @media (max-width: 560px) {
   .bottom-section { grid-template-columns: 1fr; }
