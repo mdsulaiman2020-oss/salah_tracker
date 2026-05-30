@@ -652,7 +652,13 @@ body {
   .user-info-bar { flex-direction: column; align-items: stretch; width: 100%; }
   .info-divider { width: 100%; height: 1px; }
   .bottom-section { grid-template-columns: 1fr 1fr; }
-  .info-field input, .info-field select { text-align: left; text-align-last: left; }
+  .info-field input { text-align: left; }
+  .info-field select {
+    width: auto !important;
+    margin-right: auto;
+    text-align: left !important;
+    text-align-last: left !important;
+  }
 }
 @media (max-width: 560px) {
   .bottom-section { grid-template-columns: 1fr; }
