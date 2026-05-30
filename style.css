@@ -741,6 +741,10 @@ body {
   .bottom-section { grid-template-columns: 1fr; }
   .prayer-btn { width: 28px; height: 28px; }
   .check-icon { font-size: 0.8rem; }
+  .celebration-message { padding: 24px 28px; border-radius: 20px; max-width: 90%; }
+  .celebration-emoji { font-size: 2.4rem; }
+  .celebration-message h2 { font-size: 1.6rem; }
+  .celebration-message p { font-size: 0.9rem; }
 }
 
 /* ── TEMPORARY: Alhamdulillah column hidden ── remove to re-enable ── */
