@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ilmul Jannah – Salah Tracker</title>
+  <meta name="description" content="A beautiful interactive Salah Tracker for kids to guard their daily prayers and strengthen their Imaan." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Floating particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Celebration overlay -->
+  <div class="celebration-overlay" id="celebrationOverlay">
+    <div class="celebration-message" id="celebrationMessage">
+      <span class="celebration-emoji">🌟</span>
+      <h2>MashaAllah!</h2>
+      <p id="celebrationText">All prayers completed today!</p>
+    </div>
+  </div>
+
+  <div class="app-wrapper">
+
+    <!-- ═══════════════════════════════════════════ HEADER ═══ -->
+    <header class="app-header">
+      <div class="header-decor header-decor--left">
+        <span class="lantern">🪔</span>
+        <div class="leaf-group">🌿</div>
+      </div>
+
+      <div class="header-center">
+        <div class="brand-logo">
+          <div class="logo-circle">
+            <span class="logo-star">⭐</span>
+            <span class="logo-text">ILMUL<br/>JANNAH</span>
+          </div>
+          <h1 class="brand-title">Salah Tracker</h1>
+        </div>
+        <p class="brand-tagline">🌿 Guard your prayers, strengthen your Imaan 🌿</p>
+
+        <!-- User Info -->
+        <div class="user-info-bar">
+          <div class="info-field">
+            <span class="info-icon">👤</span>
+            <label for="studentName">Name</label>
+            <input type="text" id="studentName" placeholder="Your name…" maxlength="40" autocomplete="off" />
+          </div>
+          <div class="info-divider"></div>
+          <div class="info-field">
+            <span class="info-icon">📅</span>
+            <label for="monthSelect">Month</label>
+            <select id="monthSelect">
+              <option value="January">January</option>
+              <option value="February">February</option>
+              <option value="March">March</option>
+              <option value="April">April</option>
+              <option value="May" selected>May</option>
+              <option value="June">June</option>
+              <option value="July">July</option>
+              <option value="August">August</option>
+              <option value="September">September</option>
+              <option value="October">October</option>
+              <option value="November">November</option>
+              <option value="December">December</option>
+            </select>
+          </div>
+          <div class="info-divider"></div>
+          <div class="info-field">
+            <span class="info-icon">🎓</span>
+            <label for="classGroup">Class / Group</label>
+            <input type="text" id="classGroup" placeholder="Class…" maxlength="20" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+
+      <div class="header-decor header-decor--right">
+        <span class="lantern">🪔</span>
+        <div class="leaf-group">🌿</div>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════ PROGRESS SUMMARY ═══ -->
+    <section class="progress-summary" id="progressSummary">
+      <div class="progress-card" id="progressCard">
+        <div class="progress-info">
+          <span class="progress-label">Monthly Progress</span>
+          <span class="progress-count" id="progressCount">0 / 0</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+        <span class="progress-pct" id="progressPct">0%</span>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════ TRACKER TABLE ═══ -->
+    <main class="tracker-section">
+      <div class="mosque-watermark" aria-hidden="true">
+        <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+          <g fill="currentColor" opacity="0.06">
+            <!-- Mosque silhouette simplified -->
+            <rect x="50" y="300" width="700" height="100"/>
+            <rect x="150" y="220" width="500" height="80"/>
+            <rect x="280" y="140" width="240" height="80"/>
+            <!-- Main dome -->
+            <ellipse cx="400" cy="140" rx="120" ry="60"/>
+            <rect x="370" y="60" width="60" height="80"/>
+            <!-- Side domes -->
+            <ellipse cx="200" cy="220" rx="70" ry="35"/>
+            <ellipse cx="600" cy="220" rx="70" ry="35"/>
+            <!-- Minarets -->
+            <rect x="80" y="100" width="30" height="200"/>
+            <ellipse cx="95" cy="100" rx="15" ry="30"/>
+            <rect x="690" y="100" width="30" height="200"/>
+            <ellipse cx="705" cy="100" rx="15" ry="30"/>
+            <!-- Minaret tops -->
+            <polygon points="95,60 80,100 110,100"/>
+            <polygon points="705,60 690,100 720,100"/>
+            <polygon points="400,30 380,60 420,60"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="table-container">
+        <table class="prayer-table" id="prayerTable">
+          <thead>
+            <tr class="header-row">
+              <th class="day-header">DAY</th>
+              <th class="prayer-header fajr-col">
+                <div class="prayer-header-inner">
+                  <span class="prayer-icon">🌅</span>
+                  <span class="prayer-name">FAJR</span>
+                </div>
+              </th>
+              <th class="prayer-header dhuhr-col">
+                <div class="prayer-header-inner">
+                  <span class="prayer-icon">☀️</span>
+                  <span class="prayer-name">DHUHR</span>
+                </div>
+              </th>
+              <th class="prayer-header asr-col">
+                <div class="prayer-header-inner">
+                  <span class="prayer-icon">🌤️</span>
+                  <span class="prayer-name">ASR</span>
+                </div>
+              </th>
+              <th class="prayer-header maghrib-col">
+                <div class="prayer-header-inner">
+                  <span class="prayer-icon">🌇</span>
+                  <span class="prayer-name">MAGHRIB</span>
+                </div>
+              </th>
+              <th class="prayer-header isha-col">
+                <div class="prayer-header-inner">
+                  <span class="prayer-icon">🌙</span>
+                  <span class="prayer-name">ISHA</span>
+                </div>
+              </th>
+              <th class="prayer-header sunnah-col">
+                <div class="prayer-header-inner">
+                  <span class="prayer-icon">⭐</span>
+                  <span class="prayer-name">SUNNAH/<br/>EXTRA</span>
+                </div>
+              </th>
+              <th class="prayer-header quran-col">
+                <div class="prayer-header-inner">
+                  <span class="prayer-icon">📖</span>
+                  <span class="prayer-name">READING<br/>QUR'AN</span>
+                </div>
+              </th>
+              <th class="prayer-header alhamd-col">
+                <div class="prayer-header-inner">
+                  <span class="prayer-icon">❤️</span>
+                  <span class="prayer-name">ALHAMDU-<br/>LILLAH</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="trackerBody">
+            <!-- Generated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- ════════════════════════════════ BOTTOM SECTION ═══ -->
+    <section class="bottom-section">
+
+      <!-- Weekly Reflection -->
+      <div class="bottom-card reflection-card">
+        <div class="card-header reflection-header">
+          <span>📋</span>
+          <h2>WEEKLY REFLECTION</h2>
+        </div>
+        <div class="reflection-body">
+          <div class="reflection-line" id="reflectionWeek1">
+            <label>Week 1:</label>
+            <div class="underline-input-wrap">
+              <input type="text" id="ref1" placeholder="Write your reflection…" maxlength="80" />
+            </div>
+          </div>
+          <div class="reflection-line">
+            <label>Week 2:</label>
+            <div class="underline-input-wrap">
+              <input type="text" id="ref2" placeholder="Write your reflection…" maxlength="80" />
+            </div>
+          </div>
+          <div class="reflection-line">
+            <label>Week 3:</label>
+            <div class="underline-input-wrap">
+              <input type="text" id="ref3" placeholder="Write your reflection…" maxlength="80" />
+            </div>
+          </div>
+          <div class="reflection-line">
+            <label>Week 4:</label>
+            <div class="underline-input-wrap">
+              <input type="text" id="ref4" placeholder="Write your reflection…" maxlength="80" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sunnah Goals -->
+      <div class="bottom-card sunnah-card">
+        <div class="card-header sunnah-header">
+          <span>☆</span>
+          <h2>SUNNAH GOALS</h2>
+        </div>
+        <div class="sunnah-body">
+          <label class="sunnah-goal-item" id="sg1">
+            <input type="checkbox" id="goal1" />
+            <span class="custom-checkbox"></span>
+            <span class="goal-icon">📖</span>
+            <span class="goal-text">Read Quran daily</span>
+          </label>
+          <label class="sunnah-goal-item" id="sg2">
+            <input type="checkbox" id="goal2" />
+            <span class="custom-checkbox"></span>
+            <span class="goal-icon">🌿</span>
+            <span class="goal-text">Morning &amp; Evening Adhkar</span>
+          </label>
+          <label class="sunnah-goal-item" id="sg3">
+            <input type="checkbox" id="goal3" />
+            <span class="custom-checkbox"></span>
+            <span class="goal-icon">👨‍👩‍👧</span>
+            <span class="goal-text">Help parents</span>
+          </label>
+          <label class="sunnah-goal-item" id="sg4">
+            <input type="checkbox" id="goal4" />
+            <span class="custom-checkbox"></span>
+            <span class="goal-icon">🤲</span>
+            <span class="goal-text">Give Sadaqah</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Remember Card -->
+      <div class="bottom-card remember-card">
+        <div class="card-header remember-header">
+          <span>♡</span>
+          <h2>REMEMBER</h2>
+        </div>
+        <div class="remember-body">
+          <div class="sparkle">✦</div>
+          <blockquote class="remember-quote">
+            "Whoever guards their Salah, Allah will guard them."
+          </blockquote>
+          <div class="sparkle sparkle--right">✦</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-inner">
+        <span class="footer-heart">♡</span>
+        <span>CONSISTENCY TODAY, JANNAH FOREVER</span>
+        <span class="footer-heart">♡</span>
+      </div>
+    </footer>
+
+  </div><!-- /app-wrapper -->
+
+  <script src="app.js"></script>
+</body>
+</html>
