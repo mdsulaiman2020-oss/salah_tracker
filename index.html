@@ -46,7 +46,6 @@
             <polygon points="12,34 13,36 15,36 13.5,37 14,39 12,38 10,39 10.5,37 9,36 11,36" fill="#F0C96C" />
           </svg>
         </span>
-        <div class="leaf-group">🌿</div>
       </div>
 
       <div class="header-center">
@@ -56,41 +55,6 @@
             <span class="logo-text">ILMUL<br/>JANNAH</span>
           </div>
           <h1 class="brand-title">Salah Tracker</h1>
-        </div>
-        <p class="brand-tagline">🌿 Guard your prayers, strengthen your Imaan 🌿</p>
-
-        <!-- User Info -->
-        <div class="user-info-bar">
-          <div class="info-field">
-            <span class="info-icon">👤</span>
-            <label for="studentName">Name</label>
-            <input type="text" id="studentName" placeholder="Your name…" maxlength="40" autocomplete="off" />
-          </div>
-          <div class="info-divider"></div>
-          <div class="info-field">
-            <span class="info-icon">📅</span>
-            <label for="monthSelect">Month</label>
-            <select id="monthSelect">
-              <option value="January">January</option>
-              <option value="February">February</option>
-              <option value="March">March</option>
-              <option value="April">April</option>
-              <option value="May" selected>May</option>
-              <option value="June">June</option>
-              <option value="July">July</option>
-              <option value="August">August</option>
-              <option value="September">September</option>
-              <option value="October">October</option>
-              <option value="November">November</option>
-              <option value="December">December</option>
-            </select>
-          </div>
-          <div class="info-divider"></div>
-          <div class="info-field">
-            <span class="info-icon">🎓</span>
-            <label for="classGroup">Class / Group</label>
-            <input type="text" id="classGroup" placeholder="Class…" maxlength="20" autocomplete="off" />
-          </div>
         </div>
       </div>
 
@@ -108,9 +72,44 @@
             <polygon points="12,34 13,36 15,36 13.5,37 14,39 12,38 10,39 10.5,37 9,36 11,36" fill="#F0C96C" />
           </svg>
         </span>
-        <div class="leaf-group">🌿</div>
       </div>
     </header>
+
+    <!-- User Info Bar (Standalone below header) -->
+    <div class="user-info-bar-container">
+      <div class="user-info-bar">
+        <div class="info-field">
+          <span class="info-icon">👤</span>
+          <label for="studentName">Name</label>
+          <input type="text" id="studentName" placeholder="Your name…" maxlength="40" autocomplete="off" />
+        </div>
+        <div class="info-divider"></div>
+        <div class="info-field">
+          <span class="info-icon">📅</span>
+          <label for="monthSelect">Month</label>
+          <select id="monthSelect">
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May" selected>May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+          </select>
+        </div>
+        <div class="info-divider"></div>
+        <div class="info-field">
+          <span class="info-icon">🎓</span>
+          <label for="classGroup">Class / Group</label>
+          <input type="text" id="classGroup" placeholder="Class…" maxlength="20" autocomplete="off" />
+        </div>
+      </div>
+    </div>
 
     <!-- ═══════════════════════════════ PROGRESS SUMMARY ═══ -->
     <!-- Toast notification -->
