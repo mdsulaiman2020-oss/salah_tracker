@@ -441,7 +441,37 @@ body {
     font-size: 0.78rem;
   }
   .stats-row { grid-template-columns: repeat(2, 1fr); }
-  .filter-bar { flex-direction: column; }
+  .filter-bar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 12px;
+    align-items: center;
+  }
+  .filter-group {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 0;
+  }
+  .filter-group:nth-child(3) {
+    flex: 1 1 calc(65% - 4px);
+  }
+  .filter-count {
+    flex: 1 1 calc(35% - 4px);
+    text-align: right;
+    margin-left: 0;
+    align-self: center;
+    padding: 12px 0 0 0;
+    font-size: 0.78rem;
+  }
+  .filter-group label {
+    font-size: 0.65rem;
+    margin-bottom: 2px;
+  }
+  .filter-group select {
+    padding: 6px 10px;
+    font-size: 0.82rem;
+    border-radius: 8px;
+  }
 }
 @media print {
   .lb-header, .filter-bar, .admin-panel, .admin-btn, .back-link, .lb-footer { display: none !important; }
