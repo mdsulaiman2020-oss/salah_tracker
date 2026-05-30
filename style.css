@@ -734,6 +734,10 @@ body {
   }
 }
 @media (max-width: 560px) {
+  .progress-card { padding: 16px 14px; }
+  .submit-actions { flex-direction: column; gap: 10px; width: 100%; }
+  .submit-lb-btn { width: 100%; max-width: 280px; justify-content: center; }
+  .view-lb-link { font-size: 0.88rem; padding: 4px; }
   .bottom-section { grid-template-columns: 1fr; }
   .prayer-btn { width: 28px; height: 28px; }
   .check-icon { font-size: 0.8rem; }
