@@ -412,6 +412,34 @@ body {
   .lb-card-ring svg { width: 56px; height: 56px; }
 }
 @media (max-width: 480px) {
+  .lb-header {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 14px 12px;
+    gap: 10px;
+  }
+  .lb-brand {
+    order: -1;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 4px;
+    gap: 8px;
+  }
+  .lb-logo {
+    width: 42px; height: 42px;
+  }
+  .lb-logo-text {
+    font-size: 0.3rem;
+  }
+  .lb-title {
+    font-size: 1.25rem;
+  }
+  .back-link, .admin-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 10px;
+    font-size: 0.78rem;
+  }
   .stats-row { grid-template-columns: repeat(2, 1fr); }
   .filter-bar { flex-direction: column; }
 }
