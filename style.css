@@ -738,3 +738,6 @@ body {
   .prayer-btn { width: 28px; height: 28px; }
   .check-icon { font-size: 0.8rem; }
 }
+
+/* ── TEMPORARY: Alhamdulillah column hidden ── remove to re-enable ── */
+.alhamd-col, td:has(.alhamd-btn) { display: none; }
