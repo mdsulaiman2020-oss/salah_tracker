@@ -12,10 +12,18 @@
 
 /* ══════════════════════════════════════ CONSTANTS ══════════ */
 const STORAGE_KEY   = 'ilmulJannah_salahTracker_v1';
-const PRAYERS       = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'sunnah', 'quran', 'alhamd'];
-const PRAYER_LABELS = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha', 'Sunnah/Extra', "Reading Qur'an", 'Alhamdulillah'];
-const DAYS_IN_MONTH = 31;
+// PRAYERS, PRAYER_LABELS, FARD_PRAYERS, MONTHS, getDaysInMonth, computeTotalScore,
+// sanitiseText, escapeHtml are all loaded from firebase-config.js
 const CONFETTI_COLORS = ['#C9912A','#2E7D4F','#1A2F7A','#B02020','#6A2D9F','#1A7A6A','#A01A6A','#F0C96C'];
+
+/* ══════════════════════════════════════ FIREBASE ═══════════ */
+let db = null;
+try {
+  if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.firestore();
+} catch (err) {
+  console.warn('[SalahTracker] Firebase init failed (config not set yet):', err.message);
+}
 
 /* ══════════════════════════════════════ STATE ══════════════ */
 let state = {
@@ -31,11 +39,11 @@ let state = {
 
 /**
  * Safely sanitise a string for text display (no HTML injection risk).
- * @param {string} val
- * @returns {string}
+ * Note: sanitiseText is also defined in firebase-config.js (shared).
+ * This local version is a fallback.
  */
-function sanitiseText(val) {
-  return String(val ?? '').slice(0, 200);
+function _sanitise(val) {
+  return sanitiseText ? sanitiseText(val) : String(val ?? '').slice(0, 200);
 }
 
 /**
@@ -48,18 +56,42 @@ function getTodayDay() {
 
 /**
  * Get days in a given month name for current year.
- * Returns 31 for months with 31 days, 30 for others, 28/29 for Feb.
+ * Note: also available globally from firebase-config.js.
  * @param {string} monthName
  * @returns {number}
  */
-function getDaysInMonth(monthName) {
-  const year = new Date().getFullYear();
-  const monthIndex = [
-    'January','February','March','April','May','June',
-    'July','August','September','October','November','December'
-  ].indexOf(monthName);
-  if (monthIndex === -1) return 31;
-  return new Date(year, monthIndex + 1, 0).getDate();
+function _getDays(monthName) {
+  return getDaysInMonth ? getDaysInMonth(monthName) : 31;
+}
+
+/* ══════════════════════════════════════ SCORE ══════════════ */
+
+/**
+ * Compute all score fields from current state for leaderboard submission.
+ * @returns {Object}
+ */
+function computeScore() {
+  const month  = state.month || 'May';
+  const days   = getDaysInMonth(month);
+  const fard   = ['fajr','dhuhr','asr','maghrib','isha'];
+
+  let fardCompleted = 0, sunnahCompleted = 0, quranCompleted = 0;
+  let alhamdCompleted = 0, perfectDays = 0;
+
+  for (let d = 1; d <= days; d++) {
+    const dayFardDone = fard.every(p => state.prayers[`${d}-${p}`] === true);
+    if (dayFardDone) perfectDays++;
+    fard.forEach(p => { if (state.prayers[`${d}-${p}`]) fardCompleted++; });
+    if (state.prayers[`${d}-sunnah`]) sunnahCompleted++;
+    if (state.prayers[`${d}-quran`])  quranCompleted++;
+    if (state.prayers[`${d}-alhamd`]) alhamdCompleted++;
+  }
+
+  const fardTotal   = days * 5;
+  const fardPercent = fardTotal > 0 ? Math.round((fardCompleted / fardTotal) * 100) : 0;
+  const goalsCompleted = ['goal1','goal2','goal3','goal4'].filter(g => state.goals[g]).length;
+
+  return { fardCompleted, fardTotal, fardPercent, sunnahCompleted, quranCompleted, alhamdCompleted, perfectDays, goalsCompleted };
 }
 
 /* ══════════════════════════════════════ PERSISTENCE ════════ */
@@ -444,6 +476,59 @@ function bindCelebrationDismiss() {
   });
 }
 
+/* ══════════════════════════════════════ LEADERBOARD SUBMIT ═ */
+
+/**
+ * Show a toast notification.
+ * @param {string} msg
+ * @param {'success'|'error'} type
+ */
+function showToast(msg, type = 'success') {
+  const el = document.getElementById('submitToast');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = `submit-toast show${type === 'error' ? ' error' : ''}`;
+  setTimeout(() => { el.className = 'submit-toast'; }, 3200);
+}
+
+/**
+ * Submit the current tracker state as a leaderboard entry to Firestore.
+ * Each call creates a NEW document (no deduplication server-side).
+ */
+async function submitToLeaderboard() {
+  const btn = document.getElementById('submitBtn');
+  if (!db) {
+    showToast('Leaderboard not configured yet. 🔧', 'error');
+    return;
+  }
+  if (!state.name.trim()) {
+    showToast('Please enter your name first! 👤', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.querySelector('.submit-label').textContent = 'Submitting…';
+
+  try {
+    const scores = computeScore();
+    await db.collection(SUBMISSIONS_COLLECTION).add({
+      name:         sanitiseText(state.name.trim(), 60),
+      classGroup:   sanitiseText(state.classGroup.trim(), 40),
+      month:        sanitiseText(state.month, 20),
+      year:         new Date().getFullYear(),
+      submittedAt:  firebase.firestore.FieldValue.serverTimestamp(),
+      ...scores
+    });
+    showToast('JazakAllah! Your score was submitted! 🌟', 'success');
+  } catch (err) {
+    console.error('[SalahTracker] Submit error:', err.message);
+    showToast('Could not submit. Check your connection. 📡', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.querySelector('.submit-label').textContent = 'Submit to Leaderboard';
+  }
+}
+
 /* ══════════════════════════════════════ INIT ═══════════════ */
 
 function init() {
@@ -464,6 +549,10 @@ function init() {
   });
 
   console.info('[SalahTracker] Initialised. May Allah accept our prayers. 🤲');
+
+  // Submit to leaderboard button
+  const submitBtn = document.getElementById('submitBtn');
+  if (submitBtn) submitBtn.addEventListener('click', submitToLeaderboard);
 }
 
 document.addEventListener('DOMContentLoaded', init);

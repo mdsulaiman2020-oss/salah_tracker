@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ilmul Jannah – Leaderboard</title>
+  <meta name="description" content="View kids' Salah Tracker leaderboard — top performers, class rankings, and monthly prayer stats." />
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <link rel="stylesheet" href="leaderboard.css" />
+</head>
+<body>
+
+  <div class="lb-wrapper">
+
+    <!-- ═══════════════════════════════════════════ HEADER ═══ -->
+    <header class="lb-header">
+      <a href="index.html" class="back-link">← Tracker</a>
+      <div class="lb-brand">
+        <div class="lb-logo">
+          <span style="font-size:0.9rem">⭐</span>
+          <span class="lb-logo-text">ILMUL<br/>JANNAH</span>
+        </div>
+        <h1 class="lb-title">🏆 Leaderboard</h1>
+      </div>
+      <button id="adminBtn" class="admin-btn" aria-label="Open admin panel">🔐 Admin</button>
+    </header>
+
+    <!-- ══════════════════════════════════ ADMIN PANEL ═══════ -->
+    <div class="admin-panel" id="adminPanel" hidden>
+      <span class="admin-panel-label">ADMIN MODE</span>
+      <button id="exportCsvBtn" class="admin-action-btn">📥 Export CSV</button>
+      <button id="printBtn" class="admin-action-btn">🖨️ Print</button>
+      <button id="adminCloseBtn" class="admin-close-btn" aria-label="Close admin panel">✕</button>
+    </div>
+
+    <!-- ══════════════════════════════════ FILTER BAR ════════ -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label for="filterMonth">Month</label>
+        <select id="filterMonth">
+          <option value="All">All Months</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filterClass">Class / Group</label>
+        <select id="filterClass">
+          <option value="All">All Classes</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="sortBy">Sort By</label>
+        <select id="sortBy">
+          <option value="score">Total Score</option>
+          <option value="fard">Fard % Only</option>
+          <option value="perfectDays">Perfect Days</option>
+          <option value="sunnah">Sunnah</option>
+          <option value="quran">Qur'an</option>
+        </select>
+      </div>
+      <div class="filter-count" id="filterCount"></div>
+    </div>
+
+    <!-- ══════════════════════════════════ STATS ROW ═════════ -->
+    <div class="stats-row" id="statsRow"></div>
+
+    <!-- ══════════════════════════════════ PODIUM ═══════════ -->
+    <div class="podium-section" id="podiumSection" hidden></div>
+
+    <!-- ══════════════════════════════════ FULL LIST ═════════ -->
+    <p class="lb-section-title" id="listTitle" hidden>All Students</p>
+    <div class="lb-grid" id="lbGrid"></div>
+
+    <!-- ══════════════════════════════════ STATES ═══════════ -->
+    <div class="loading-state" id="loadingState">
+      <span class="spinner">🕌</span>
+      <p>Loading leaderboard…</p>
+    </div>
+    <div class="empty-state" id="emptyState" hidden>
+      <span class="empty-emoji">🌙</span>
+      <p>No submissions yet for this filter.<br/>Be the first — submit from the Tracker!</p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="lb-footer">
+      <span>♡</span> Consistency Today, Jannah Forever <span>♡</span>
+    </footer>
+
+  </div><!-- /lb-wrapper -->
+
+  <!-- ══════════════════════════════════════ ADMIN PIN MODAL ══ -->
+  <div class="modal-overlay" id="adminModal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <h2 class="modal-title" id="modalTitle">🔐 Admin Access</h2>
+      <p class="modal-subtitle">Enter your 4-digit PIN to continue</p>
+      <div class="pin-dots" id="pinDots" aria-hidden="true">
+        <div class="pin-dot" id="dot0"></div>
+        <div class="pin-dot" id="dot1"></div>
+        <div class="pin-dot" id="dot2"></div>
+        <div class="pin-dot" id="dot3"></div>
+      </div>
+      <div class="pin-pad">
+        <button class="pin-key" data-digit="1" aria-label="1">1</button>
+        <button class="pin-key" data-digit="2" aria-label="2">2</button>
+        <button class="pin-key" data-digit="3" aria-label="3">3</button>
+        <button class="pin-key" data-digit="4" aria-label="4">4</button>
+        <button class="pin-key" data-digit="5" aria-label="5">5</button>
+        <button class="pin-key" data-digit="6" aria-label="6">6</button>
+        <button class="pin-key" data-digit="7" aria-label="7">7</button>
+        <button class="pin-key" data-digit="8" aria-label="8">8</button>
+        <button class="pin-key" data-digit="9" aria-label="9">9</button>
+        <button class="pin-key pin-del" id="pinDel" aria-label="Delete">⌫</button>
+        <button class="pin-key" data-digit="0" aria-label="0">0</button>
+        <button class="pin-key pin-enter" id="pinEnter" aria-label="Enter">✓</button>
+      </div>
+      <p class="modal-error" id="modalError"></p>
+      <button class="modal-cancel" id="modalCancel">Cancel</button>
+    </div>
+  </div>
+
+  <script src="leaderboard.js"></script>
+</body>
+</html>

@@ -9,6 +9,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
 </head>
 <body>
 
@@ -85,6 +89,9 @@
     </header>
 
     <!-- ═══════════════════════════════ PROGRESS SUMMARY ═══ -->
+    <!-- Toast notification -->
+    <div class="submit-toast" id="submitToast" aria-live="polite"></div>
+
     <section class="progress-summary" id="progressSummary">
       <div class="progress-card" id="progressCard">
         <div class="progress-info">
@@ -95,6 +102,15 @@
           <div class="progress-bar-fill" id="progressBarFill"></div>
         </div>
         <span class="progress-pct" id="progressPct">0%</span>
+        <div class="submit-actions">
+          <button type="button" id="submitBtn" class="submit-lb-btn">
+            <span class="submit-icon">🚀</span>
+            <span class="submit-label">Submit to Leaderboard</span>
+          </button>
+          <a href="leaderboard.html" class="view-lb-link" target="_blank">
+            🏆 View Leaderboard
+          </a>
+        </div>
       </div>
     </section>
 

@@ -1,0 +1,35 @@
+rules_version = '2';
+// ─────────────────────────────────────────────────────────────────
+// ILMUL JANNAH — Firestore Security Rules
+//
+// Deploy these rules in Firebase Console:
+//   Firestore Database → Rules → paste this → Publish
+//
+// Or via Firebase CLI: firebase deploy --only firestore:rules
+// ─────────────────────────────────────────────────────────────────
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Leaderboard submissions:
+    //   - Anyone can READ (public leaderboard)
+    //   - Anyone can CREATE (kids submit scores, no auth required)
+    //   - No updates or deletes via the client app
+    match /submissions/{docId} {
+      allow read:   if true;
+      allow create: if isValidSubmission(request.resource.data);
+      allow update, delete: if false;
+    }
+  }
+
+  // Validate submission fields to prevent abuse
+  function isValidSubmission(data) {
+    return data.keys().hasAll(['name', 'month', 'fardPercent', 'submittedAt'])
+      && data.name is string
+      && data.name.size() > 0
+      && data.name.size() <= 60
+      && data.month is string
+      && data.fardPercent is number
+      && data.fardPercent >= 0
+      && data.fardPercent <= 100;
+  }
+}
